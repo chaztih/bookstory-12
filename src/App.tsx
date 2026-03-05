@@ -26,8 +26,6 @@ export default function App() {
     break: 5,
     extra: 5,
   });
-  const [isSubscribed, setIsSubscribed] = useState(false);
-  const [showSubscription, setShowSubscription] = useState(false);
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -100,18 +98,6 @@ export default function App() {
           <h1 className="text-base sm:text-lg font-bold tracking-tight">再讀五分鐘</h1>
         </div>
         <div className="flex items-center gap-2 sm:gap-4">
-          {!isSubscribed && (
-            <button 
-              onClick={() => setShowSubscription(true)}
-              className="px-2.5 py-1.5 bg-amber-100 text-amber-700 text-[10px] sm:text-xs font-bold rounded-full hover:bg-amber-200 transition-colors flex items-center gap-1 sm:gap-1.5 shadow-sm active:scale-95"
-            >
-              <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 bg-amber-500 rounded-full flex items-center justify-center text-white">
-                <span className="text-[8px] sm:text-[10px]">★</span>
-              </div>
-              <span className="hidden xs:inline">去廣告</span>
-              <span className="xs:hidden">Premium</span>
-            </button>
-          )}
           <button 
             onClick={() => setIsMuted(!isMuted)}
             className="p-2.5 sm:p-3 hover:bg-black/5 rounded-full transition-colors active:scale-90"
@@ -224,28 +210,6 @@ export default function App() {
             </span>
           </button>
         </div>
-
-        {/* Improved Ad Placement: Integrated Discovery Card */}
-        {!isSubscribed && (
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="w-full bg-white border border-black/5 rounded-[24px] p-4 shadow-sm flex items-center gap-4 relative overflow-hidden cursor-pointer hover:border-emerald-200 transition-colors group"
-            onClick={() => window.open('https://picsum.photos', '_blank')}
-          >
-            <div className="absolute top-2 right-3 bg-gray-100 text-[7px] font-bold px-1.5 py-0.5 rounded text-gray-400 uppercase tracking-tighter">Sponsored</div>
-            <div className="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-              <Coffee className="text-emerald-600" size={24} />
-            </div>
-            <div className="flex-1">
-              <p className="text-xs font-bold text-gray-800">想提升 200% 專注力嗎？</p>
-              <p className="text-[10px] text-gray-500 mt-0.5">試試這款專為學生設計的白噪音耳機...</p>
-            </div>
-            <div className="text-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity">
-              <Play size={16} fill="currentColor" />
-            </div>
-          </motion.div>
-        )}
 
         {/* Reminder Message */}
         <AnimatePresence>
@@ -361,107 +325,6 @@ export default function App() {
       <footer className="w-full max-w-2xl py-8 text-gray-400 text-[10px] sm:text-xs font-bold tracking-[0.2em] uppercase flex flex-col items-center gap-4 mt-auto">
         <span>Stay focused, just five more minutes.</span>
       </footer>
-
-      {/* Subscription Modal */}
-      <AnimatePresence>
-        {showSubscription && (
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/40 backdrop-blur-md z-[60] flex items-center justify-center p-4 sm:p-6"
-          >
-            <motion.div 
-              initial={{ scale: 0.9, y: 20, opacity: 0 }}
-              animate={{ scale: 1, y: 0, opacity: 1 }}
-              exit={{ scale: 0.9, y: 20, opacity: 0 }}
-              className="bg-white w-full max-w-sm rounded-[32px] overflow-hidden shadow-2xl max-h-[90vh] flex flex-col"
-            >
-              <div className="bg-gradient-to-br from-amber-400 to-orange-500 p-6 sm:p-8 text-white text-center relative flex-shrink-0">
-                <button 
-                  onClick={() => setShowSubscription(false)}
-                  className="absolute top-4 right-4 p-2 hover:bg-white/20 rounded-full transition-colors active:scale-90"
-                >
-                  <RotateCcw size={20} className="rotate-45" />
-                </button>
-                <div className="w-14 h-14 sm:w-16 sm:h-16 bg-white/20 rounded-2xl sm:rounded-3xl flex items-center justify-center mx-auto mb-4 backdrop-blur-sm">
-                  <span className="text-2xl sm:text-3xl">💎</span>
-                </div>
-                <h2 className="text-xl sm:text-2xl font-bold">升級專業版</h2>
-                <p className="text-amber-50 text-xs sm:text-sm mt-1">一次付費，永久享受無廣告體驗</p>
-              </div>
-              
-              <div className="p-6 sm:p-8 overflow-y-auto">
-                <ul className="space-y-3 mb-6 sm:mb-8">
-                  {[
-                    '永久移除所有廣告',
-                    '解鎖所有自定義主題',
-                    '跨裝置同步設定',
-                    '支持台灣獨立開發者'
-                  ].map((item, i) => (
-                    <li key={i} className="flex items-center gap-3 text-xs sm:text-sm font-semibold text-gray-600">
-                      <div className="w-5 h-5 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center flex-shrink-0">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                      </div>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-
-                <div className="grid grid-cols-1 gap-3 mb-6 sm:mb-8">
-                  {/* Monthly Option */}
-                  <button 
-                    onClick={() => {
-                      setIsSubscribed(true);
-                      setShowSubscription(false);
-                      alert('感謝訂閱！已成功升級為專業版。');
-                    }}
-                    className="flex justify-between items-center p-4 rounded-2xl border-2 border-black/5 hover:border-emerald-500 transition-all text-left group active:scale-[0.98]"
-                  >
-                    <div>
-                      <p className="text-[10px] font-bold text-gray-400 uppercase">月費計劃</p>
-                      <p className="text-base sm:text-lg font-bold text-gray-900">NT$ 60 <span className="text-xs font-normal text-gray-400">/ 月</span></p>
-                    </div>
-                    <div className="w-6 h-6 rounded-full border-2 border-gray-200 group-hover:border-emerald-500 flex items-center justify-center">
-                      <div className="w-3 h-3 rounded-full bg-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    </div>
-                  </button>
-
-                  {/* Lifetime Option */}
-                  <button 
-                    onClick={() => {
-                      setIsSubscribed(true);
-                      setShowSubscription(false);
-                      alert('感謝支持！您已獲得終身專業版權限。');
-                    }}
-                    className="flex justify-between items-center p-4 rounded-2xl border-2 border-amber-500 bg-amber-50 transition-all text-left relative group active:scale-[0.98]"
-                  >
-                    <div className="absolute -top-2.5 right-4 bg-amber-500 text-white text-[8px] sm:text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-tighter">超值終身</div>
-                    <div>
-                      <p className="text-[10px] font-bold text-amber-600 uppercase">終身買斷</p>
-                      <p className="text-base sm:text-lg font-bold text-gray-900">NT$ 300 <span className="text-xs font-normal text-gray-400">/ 永久</span></p>
-                    </div>
-                    <div className="w-6 h-6 rounded-full border-2 border-amber-500 flex items-center justify-center">
-                      <div className="w-3 h-3 rounded-full bg-amber-500"></div>
-                    </div>
-                  </button>
-                </div>
-
-                <button 
-                  onClick={() => {
-                    setIsSubscribed(true);
-                    setShowSubscription(false);
-                    alert('感謝支持！已成功升級。');
-                  }}
-                  className="w-full bg-black text-white py-4 rounded-2xl font-bold hover:bg-gray-800 transition-all shadow-lg active:scale-[0.98]"
-                >
-                  確認升級
-                </button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 }
